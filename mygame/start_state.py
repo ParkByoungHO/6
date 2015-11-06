@@ -9,7 +9,7 @@ image = None
 
 def enter():
     global image,bgm
-    open_canvas()
+    open_canvas(sync=True)
     image = load_image('resource/bg.png')
     bgm = load_music('resource/1.mp3')
     bgm.set_volume(64)
