@@ -247,6 +247,7 @@ def enter():
     global f16key,f17key,f18key,f19key,f20key,f21key,f22key,f23key,f24key,f25key,f26key,f27key,f28key,f29key,f30key
     global tkey,t1key,t2key,t3key,t4key,t5key,t6key,t7key,t8key,t9key,t10key,t11key,t12key,t13key,t14key,t15key
     global t16key,t17key,t18key,t19key,t20key,t21key,t22key,t23key,t24key,t25key,t26key,t27key,t28key,t29key,t30key
+    global t31key
     global hkey,h1key,h2key,h3key,h4key,h5key,h6key,h7key,h8key,h9key,h10key,h11key,h12key,h13key,h14key,h15key
     global h16key,h17key,h18key,h19key,h20key,h21key,h22key,h23key,h24key,h25key,h26key,h27key,h28key,h29key,h30key
     global ukey,u1key,u2key,u3key,u4key,u5key,u6key,u7key,u8key,u9key,u10key,u11key,u12key,u13key,u14key,u15key
@@ -316,6 +317,7 @@ def enter():
     t28key = Tkey()
     t29key = Tkey()
     t30key = Tkey()
+    t31key = Tkey()
     hkey = Hkey()
     h1key = Hkey()
     h2key = Hkey()
@@ -421,6 +423,7 @@ def exit():
     global f16key,f17key,f18key,f19key,f20key,f21key,f22key,f23key,f24key,f25key,f26key,f27key,f28key,f29key,f30key
     global tkey,t1key,t2key,t3key,t4key,t5key,t6key,t7key,t8key,t9key,t10key,t11key,t12key,t13key,t14key,t15key
     global t16key,t17key,t18key,t19key,t20key,t21key,t22key,t23key,t24key,t25key,t26key,t27key,t28key,t29key,t30key
+    global t31key
     global hkey,h1key,h2key,h3key,h4key,h5key,h6key,h7key,h8key,h9key,h10key,h11key,h12key,h13key,h14key,h15key
     global h16key,h17key,h18key,h19key,h20key,h21key,h22key,h23key,h24key,h25key,h26key,h27key,h28key,h29key,h30key
     global ukey,u1key,u2key,u3key,u4key,u5key,u6key,u7key,u8key,u9key,u10key,u11key,u12key,u13key,u14key,u15key
@@ -432,6 +435,7 @@ def exit():
     del(f16key,f17key,f18key,f19key,f20key,f21key,f22key,f23key,f24key,f25key,f26key,f27key,f28key,f29key,f30key)
     del(tkey,t1key,t2key,t3key,t4key,t5key,t6key,t7key,t8key,t9key,t10key,t11key,t12key,t13key,t14key,t15key)
     del(t16key,t17key,t18key,t19key,t20key,t21key,t22key,t23key,t24key,t25key,t26key,t27key,t28key,t29key,t30key)
+    del(t31key,)
     del(hkey,h1key,h2key,h3key,h4key,h5key,h6key,h7key,h8key,h9key,h10key,h11key,h12key,h13key,h14key,h15key)
     del(h16key,h17key,h18key,h19key,h20key,h21key,h22key,h23key,h24key,h25key,h26key,h27key,h28key,h29key,h30key)
     del(ukey,u1key,u2key,u3key,u4key,u5key,u6key,u7key,u8key,u9key,u10key,u11key,u12key,u13key,u14key,u15key)
@@ -459,6 +463,7 @@ def Tkey_update(frame_time):
     t7key.update(frame_time),t8key.update(frame_time),t9key.update(frame_time),t10key.update(frame_time),t11key.update(frame_time),t12key.update(frame_time),t13key.update(frame_time),t30key.update(frame_time)
     t14key.update(frame_time),t15key.update(frame_time),t16key.update(frame_time),t17key.update(frame_time),t18key.update(frame_time),t19key.update(frame_time),t20key.update(frame_time),t21key.update(frame_time)
     t22key.update(frame_time),t23key.update(frame_time),t24key.update(frame_time),t25key.update(frame_time),t26key.update(frame_time),t27key.update(frame_time),t28key.update(frame_time),t29key.update(frame_time),
+    t31key.update(frame_time)
 def Hkey_update(frame_time):
     hkey.update(frame_time), h1key.update(frame_time), h2key.update(frame_time), h3key.update(frame_time), h4key.update(frame_time), h5key.update(frame_time), h6key.update(frame_time)
     h7key.update(frame_time),h8key.update(frame_time),h9key.update(frame_time),h10key.update(frame_time),h11key.update(frame_time),h12key.update(frame_time),h13key.update(frame_time),h30key.update(frame_time)
@@ -812,54 +817,76 @@ def nodeupdate(frame_time): #노트 나오게한다.
         u23key.update(frame_time)
         u23key.draw()
 
-    if a>= 42.000:  #
+    if a>= 42.:  #
         f22key.update(frame_time)
         f22key.draw()
-    if a>= 42.08:
+    if a>= 42.12:
         h25key.update(frame_time)
         h25key.draw()
-    if a>= 42.16:
+    if a>= 42.24:
         u18key.update(frame_time)
         u18key.draw()
-    if a>= 42.24:
+    if a>= 42.36:
         u19key.update(frame_time)
         u19key.draw()
-    if a>= 42.320:
+    if a>= 42.48:
         f19key.update(frame_time)
         f19key.draw()
-    if a>= 42.40:
+    if a>= 42.6:
         t19key.update(frame_time)
         t19key.draw()
-    if a>= 42.480:
+    if a>= 42.72:
         t20key.update(frame_time)
         t20key.draw()
-    if a>= 42.56:
+    if a>= 42.86:
         u20key.update(frame_time)
         u20key.draw()
         t21key.update(frame_time)
         t21key.draw()
 
-    if a>= 43.5000:
+    if a>= 44.55:
+        k15key.update(frame_time)
+        k15key.draw()
+        f25key.update(frame_time)
+        f25key.draw()
+    if a>=46.5:
+        k16key.update(frame_time)
+        k16key.draw()
         t24key.update(frame_time)
         t24key.draw()
-    if a>= 45.000:
-        t25key.update(frame_time)
-        t25key.draw()
-    if a>=46.500:
-        t26key.update(frame_time)
-        t26key.draw()
-    if a>=48.000:
-        t27key.update(frame_time)
-        t27key.draw()
-    if a>=48.500:
-        t28key.update(frame_time)
-        t28key.draw()
-    if a>=49.000:
+
+    if a>=48.0:
+        u24key.update(frame_time)
+        u24key.draw()
         t29key.update(frame_time)
         t29key.draw()
-    if a>=49.500:
-        t30key.update(frame_time)
-        t30key.draw()
+
+    if a>=49.0:
+        k21key.update(frame_time)
+        k21key.draw()
+        f26key.update(frame_time)
+        f26key.draw()
+
+    if a>=49.8:
+        k17key.update(frame_time)
+        k17key.draw()
+        t25key.update(frame_time)
+        t25key.draw()
+    if a>=50.1:
+        k18key.update(frame_time)
+        k18key.draw()
+        t26key.update(frame_time)
+        t26key.draw()
+    if a>=50.4:
+        k19key.update(frame_time)
+        k19key.draw()
+        t27key.update(frame_time)
+        t27key.draw()
+    if a>=50.7:
+        k20key.update(frame_time)
+        k20key.draw()
+        t28key.update(frame_time)
+        t28key.draw()
 
 
 
