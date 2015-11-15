@@ -24,7 +24,7 @@ class Fkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 20,600
+        self.x , self.y = 45,600
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -72,7 +72,7 @@ class Tkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 60,600
+        self.x , self.y = 90,600
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -117,7 +117,7 @@ class Hkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 100,600
+        self.x , self.y = 140,600
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -162,7 +162,7 @@ class Ukey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 140,600
+        self.x , self.y = 188,600
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -207,7 +207,7 @@ class Kkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 180,600
+        self.x , self.y = 230,600
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -241,8 +241,20 @@ class Kkey:
 
 
 
+
+
+
 def enter():
-    frame_time = 0
+    global bgimage, button,motionF,motionT,motionH,motionU,motionK
+    motionF = load_image('resource/keyboard_motion_green.png')
+    motionT= load_image('resource/keyboard_motion_sky.png')
+    motionH= load_image('resource/keyboard_motion_green.png')
+    motionU= load_image('resource/keyboard_motion_sky.png')
+    motionK= load_image('resource/keyboard_motion_green.png')
+    bgimage = load_image('resource/blackbg.jpg')
+    button = load_image('resource/button.png')
+    global green,blue
+    global state
     global fkey,f1key,f2key,f3key,f4key,f5key,f6key,f7key,f8key,f9key,f10key,f11key,f12key,f13key,f14key,f15key
     global f16key,f17key,f18key,f19key,f20key,f21key,f22key,f23key,f24key,f25key,f26key,f27key,f28key,f29key,f30key
     global tkey,t1key,t2key,t3key,t4key,t5key,t6key,t7key,t8key,t9key,t10key,t11key,t12key,t13key,t14key,t15key
@@ -419,6 +431,11 @@ def enter():
 
 
 def exit():
+    global bgimage,buttonn,motionF,motionT,motionH,motionU,motionK
+    global green,blue
+    global state
+    del(bgimage,button,motionF,motionT,motionH,motionU,motionK)
+    del(green,blue)
     global fkey,f1key,f2key,f3key,f4key,f5key,f6key,f7key,f8key,f9key,f10key,f11key,f12key,f13key,f14key,f15key
     global f16key,f17key,f18key,f19key,f20key,f21key,f22key,f23key,f24key,f25key,f26key,f27key,f28key,f29key,f30key
     global tkey,t1key,t2key,t3key,t4key,t5key,t6key,t7key,t8key,t9key,t10key,t11key,t12key,t13key,t14key,t15key
@@ -481,12 +498,44 @@ def Kkey_update(frame_time):
     k22key.update(frame_time),k23key.update(frame_time),k24key.update(frame_time),k25key.update(frame_time),k26key.update(frame_time),k27key.update(frame_time),k28key.update(frame_time),k29key.update(frame_time),
 def handle_events(frame_time):
     events = get_events()
+    global green,blue,state
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
             game_framework.change_state(title_state)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_f :
+            state = 1
+            green = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_h :
+            state = 2
+            green = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_k :
+            state = 3
+            green = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_t :
+            state = 4
+            blue = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_u :
+            state = 5
+            blue = True
+
+        elif event.type == SDL_KEYUP and event.key == SDLK_f :
+            state = 0
+            green = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_h :
+            state = 0
+            green = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_k :
+            state = 0
+            green = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_t :
+            state = 0
+            blue = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_u :
+            state = 0
+            blue = False
     pass
 
 
@@ -904,15 +953,30 @@ def draw(frame_time):
     global running
     running = True
     global a
+    global green,blue,state
+    green = blue = False
     a = 0
     while running:
 
         handle_events(frame_time)
         clear_canvas()
+        bgimage.draw(400,300,800,600)
         nodeupdate(frame_time)
+        if green == True and state ==1:
+            motionF.draw(43,100,47,1000)
+        if green == True and state ==2:
+            motionH.draw(138,100,47,1000)
+        if green == True and state ==3:
+            motionK.draw(232,100,47,1000)
+        if blue == True and state == 4:
+            motionT.draw(90,100,47,1000)
+        if blue == True  and state == 5:
+            motionU.draw(185,100,47,1000)
+        button.draw(200,100,400,200)
         update_canvas()
-        a+=frame_time
+        a+=frame_time -0.000001
         print(a)
+
 
     close_canvas()
     pass
