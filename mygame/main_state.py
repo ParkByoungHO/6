@@ -1,7 +1,7 @@
 import random
 import json
 import os
-
+import jam
 from pico2d import *
 
 import game_framework
@@ -238,6 +238,18 @@ class Kkey:
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
             self.NOTE_SPEED_PPS = self.NOTE_SPEED_PPS / 2.0
             self.y /= 2
+def soundplay(frame_time):
+    frame_time=0
+    global sound
+    sound =load_music('resource/say that you.mp3')
+    sound.set_volume(64)
+    sound.play(1)
+class buttontectangle:
+    def get_bb(self):
+        return 18,66,254,97
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
 
 
 
@@ -245,7 +257,7 @@ class Kkey:
 
 
 def enter():
-    global bgimage, button,motionF,motionT,motionH,motionU,motionK
+    global bgimage, button,motionF,motionT,motionH,motionU,motionK,actbutton
     motionF = load_image('resource/keyboard_motion_green.png')
     motionT= load_image('resource/keyboard_motion_sky.png')
     motionH= load_image('resource/keyboard_motion_green.png')
@@ -253,7 +265,7 @@ def enter():
     motionK= load_image('resource/keyboard_motion_green.png')
     bgimage = load_image('resource/blackbg.jpg')
     button = load_image('resource/button.png')
-    global green,blue
+    global green,blue,F,T,H,U,K,example
     global state
     global fkey,f1key,f2key,f3key,f4key,f5key,f6key,f7key,f8key,f9key,f10key,f11key,f12key,f13key,f14key,f15key
     global f16key,f17key,f18key,f19key,f20key,f21key,f22key,f23key,f24key,f25key,f26key,f27key,f28key,f29key,f30key
@@ -266,7 +278,7 @@ def enter():
     global u16key,u17key,u18key,u19key,u20key,u21key,u22key,u23key,u24key,u25key,u26key,u27key,u28key,u29key,u30key
     global kkey,k1key,k2key,k3key,k4key,k5key,k6key,k7key,k8key,k9key,k10key,k11key,k12key,k13key,k14key,k15key
     global k16key,k17key,k18key,k19key,k20key,k21key,k22key,k23key,k24key,k25key,k26key,k27key,k28key,k29key,k30key
-    global sound
+    actbutton=buttontectangle()
     fkey = Fkey()
     f1key = Fkey()
     f2key = Fkey()
@@ -424,18 +436,17 @@ def enter():
     k29key = Kkey()
     k30key = Kkey()
 
-    sound =load_music('resource/say that you.mp3')
-    sound.set_volume(64)
-    sound.play(1)
+
     pass
 
 
 def exit():
-    global bgimage,buttonn,motionF,motionT,motionH,motionU,motionK
-    global green,blue
+    global bgimage,buttonn,motionF,motionT,motionH,motionU,motionK,actbutton
+    global green,blue,example
     global state
-    del(bgimage,button,motionF,motionT,motionH,motionU,motionK)
-    del(green,blue)
+    del(bgimage,button,motionF,motionT,motionH,motionU,motionK,actbutton)
+    del(green,blue,F,T,H,U,K,example)
+
     global fkey,f1key,f2key,f3key,f4key,f5key,f6key,f7key,f8key,f9key,f10key,f11key,f12key,f13key,f14key,f15key
     global f16key,f17key,f18key,f19key,f20key,f21key,f22key,f23key,f24key,f25key,f26key,f27key,f28key,f29key,f30key
     global tkey,t1key,t2key,t3key,t4key,t5key,t6key,t7key,t8key,t9key,t10key,t11key,t12key,t13key,t14key,t15key
@@ -498,57 +509,90 @@ def Kkey_update(frame_time):
     k22key.update(frame_time),k23key.update(frame_time),k24key.update(frame_time),k25key.update(frame_time),k26key.update(frame_time),k27key.update(frame_time),k28key.update(frame_time),k29key.update(frame_time),
 def handle_events(frame_time):
     events = get_events()
-    global green,blue,state
+    global green,blue,state,running,F,T,H,U,K,example
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
-            game_framework.change_state(title_state)
+            game_framework.change_state(jam)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_f :
-            state = 1
+            F=True
             green = True
         elif event.type == SDL_KEYDOWN and event.key == SDLK_h :
-            state = 2
+            H=True
             green = True
         elif event.type == SDL_KEYDOWN and event.key == SDLK_k :
-            state = 3
+            K=True
             green = True
         elif event.type == SDL_KEYDOWN and event.key == SDLK_t :
-            state = 4
+            T=True
             blue = True
         elif event.type == SDL_KEYDOWN and event.key == SDLK_u :
-            state = 5
+            U=True
             blue = True
 
         elif event.type == SDL_KEYUP and event.key == SDLK_f :
-            state = 0
+            F=False
             green = False
         elif event.type == SDL_KEYUP and event.key == SDLK_h :
-            state = 0
+            H=False
             green = False
         elif event.type == SDL_KEYUP and event.key == SDLK_k :
-            state = 0
+            K=False
             green = False
         elif event.type == SDL_KEYUP and event.key == SDLK_t :
-            state = 0
+            T=False
             blue = False
         elif event.type == SDL_KEYUP and event.key == SDLK_u :
-            state = 0
+            U=False
             blue = False
     pass
 
+def coolcollide(a,b):#rectangle a  , note b
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
 
+    if top_a < bottom_b : return False
+    if bottom_a > top_b : return False
+    return True
+
+def goodcollide(a,b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if top_a < bottom_b : return False
+    if bottom_a > top_b : return False
+    return True
+def badcollide(a,b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if top_a +3 < bottom_b : return False
+    if bottom_a <top_b : return False
+    return True
+def misscollide(a,b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if top_b> bottom_a:return False
+    return True
 
 def update(frame_time):
+    global F
+    F=False
+    soundplay(frame_time)
     Fkey_update(frame_time)
     Tkey_update(frame_time)
     Hkey_update(frame_time)
     Ukey_update(frame_time)
     Kkey_update(frame_time)
 
-    pass
+    if coolcollide(actbutton,fkey):
+        print("true")
+
+
+        pass
 def nodeupdate(frame_time): #노트 나오게한다.
+
     if a >= 0.5:
         fkey.update(frame_time)
         fkey.draw()
@@ -953,8 +997,8 @@ def draw(frame_time):
     global running
     running = True
     global a
-    global green,blue,state
-    green = blue = False
+    global green,blue,F,T,H,U,K,example
+    green = blue = F = T = H = U = K = example = False
     a = 0
     while running:
 
@@ -962,23 +1006,29 @@ def draw(frame_time):
         clear_canvas()
         bgimage.draw(400,300,800,600)
         nodeupdate(frame_time)
-        if green == True and state ==1:
+        if green == True and F ==True:
             motionF.draw(43,100,47,1000)
-        if green == True and state ==2:
+        if green == True and H ==True:
             motionH.draw(138,100,47,1000)
-        if green == True and state ==3:
+        if green == True and K ==True:
             motionK.draw(232,100,47,1000)
-        if blue == True and state == 4:
+        if blue == True and T ==True:
             motionT.draw(90,100,47,1000)
-        if blue == True  and state == 5:
+        if blue == True  and U ==True:
             motionU.draw(185,100,47,1000)
-        button.draw(200,100,400,200)
+        a+=frame_time
+        fkey.draw_bb()
+
+        #button.draw(200,100,400,200)
+        actbutton.draw_bb()
         update_canvas()
-        a+=frame_time -0.000001
-        print(a)
+
+        #print(a)
 
 
     close_canvas()
+
+
     pass
 
 
