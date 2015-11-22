@@ -1,7 +1,6 @@
 import random
 import json
 import os
-import jam
 from pico2d import *
 
 import game_framework
@@ -9,11 +8,11 @@ import title_state
 
 
 
-name = "MainState"
+name = "say_that_you_note"
 class Fkey:
 
     PIXEL_PER_METER = (10.0 / 0.1) #10 pixel 10cm
-    NOTE_SPEED_KMPH = 10.0          # K, / Hour
+    NOTE_SPEED_KMPH = 20.0          # K, / Hour
     NOTE_SPEED_MPM = (NOTE_SPEED_KMPH*1000.0 / 60.0)
     NOTE_SPEED_MPS = (NOTE_SPEED_MPM / 60.0)
     NOTE_SPEED_PPS = (NOTE_SPEED_MPS * PIXEL_PER_METER)
@@ -24,7 +23,7 @@ class Fkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 45,random.randint(600,22000)
+        self.x , self.y = 45,random.randint(800,57300)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -61,7 +60,7 @@ class Fkey:
 class Tkey:
 
     PIXEL_PER_METER = (10.0 / 0.1) #10 pixel 10cm
-    NOTE_SPEED_KMPH = 10.0          # K, / Hour
+    NOTE_SPEED_KMPH = 20.0          # K, / Hour
     NOTE_SPEED_MPM = (NOTE_SPEED_KMPH*1000.0 / 60.0)
     NOTE_SPEED_MPS = (NOTE_SPEED_MPM / 60.0)
     NOTE_SPEED_PPS = (NOTE_SPEED_MPS * PIXEL_PER_METER)
@@ -72,7 +71,7 @@ class Tkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 90,random.randint(600,22000)
+        self.x , self.y = 90,random.randint(800,57300)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -106,7 +105,7 @@ class Tkey:
 class Hkey:
 
     PIXEL_PER_METER = (10.0 / 0.1) #10 pixel 10cm
-    NOTE_SPEED_KMPH = 10.0          # K, / Hour
+    NOTE_SPEED_KMPH = 20.0          # K, / Hour
     NOTE_SPEED_MPM = (NOTE_SPEED_KMPH*1000.0 / 60.0)
     NOTE_SPEED_MPS = (NOTE_SPEED_MPM / 60.0)
     NOTE_SPEED_PPS = (NOTE_SPEED_MPS * PIXEL_PER_METER)
@@ -117,7 +116,7 @@ class Hkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 140,random.randint(600,22000)
+        self.x , self.y = 140,random.randint(800,57300)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -151,7 +150,7 @@ class Hkey:
 class Ukey:
 
     PIXEL_PER_METER = (10.0 / 0.1) #10 pixel 10cm
-    NOTE_SPEED_KMPH = 10.0          # K, / Hour
+    NOTE_SPEED_KMPH = 20.0          # K, / Hour
     NOTE_SPEED_MPM = (NOTE_SPEED_KMPH*1000.0 / 60.0)
     NOTE_SPEED_MPS = (NOTE_SPEED_MPM / 60.0)
     NOTE_SPEED_PPS = (NOTE_SPEED_MPS * PIXEL_PER_METER)
@@ -162,7 +161,7 @@ class Ukey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 188,random.randint(600,22000)
+        self.x , self.y = 188,random.randint(800,57300)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -196,7 +195,7 @@ class Ukey:
 class Kkey:
 
     PIXEL_PER_METER = (10.0 / 0.1) #10 pixel 10cm
-    NOTE_SPEED_KMPH = 10.0          # K, / Hour
+    NOTE_SPEED_KMPH = 20.0          # K, / Hour
     NOTE_SPEED_MPM = (NOTE_SPEED_KMPH*1000.0 / 60.0)
     NOTE_SPEED_MPS = (NOTE_SPEED_MPM / 60.0)
     NOTE_SPEED_PPS = (NOTE_SPEED_MPS * PIXEL_PER_METER)
@@ -207,7 +206,7 @@ class Kkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 230,random.randint(600,22000)
+        self.x , self.y = 230,random.randint(800,57300)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -250,9 +249,37 @@ def soundplay():
 
     global sound
     sound =load_music('resource/say that you.mp3')
-    sound.set_volume(64)
+    sound.set_volume(100)
     sound.play(1)
 
+class Cool:
+    image = None
+    def __init__(self):
+        if Cool.image == None:
+            Cool.image = load_image('resource/Cool.png')
+        self.x,self.y = 340,300
+        self.switch = False
+    def draw(self):
+        self.image.draw(self.x,self.y)
+
+class Good:
+    image = None
+    def __init__(self):
+        if Good.image == None:
+            Good.image = load_image('resource/Good.png')
+        self.x,self.y = 340,200
+        self.switch = False
+    def draw(self):
+        self.image.draw(self.x,self.y)
+class Fail:
+    image = None
+    def __init__(self):
+        if Fail.image == None:
+            Fail.image = load_image('resource/Fail.png')
+        self.x,self.y = 340,100
+        self.switch = False
+    def draw(self):
+        self.image.draw(self.x,self.y)
 
 
 
@@ -264,6 +291,7 @@ def enter():
     global bgimage, button,motionF,motionT,motionH,motionU,motionK,actbutton
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote
     global green,blue,F,T,H,U,K
+    global cool,good,fail
     global state
     motionF = load_image('resource/keyboard_motion_green.png')
     motionT= load_image('resource/keyboard_motion_sky.png')
@@ -275,12 +303,14 @@ def enter():
 
     actbutton=buttontectangle()
 
-    Fkeynote=[Fkey() for i in range (50)]
-    Tkeynote=[Tkey() for o in range (50)]
-    Hkeynote=[Hkey() for p in range (50)]
-    Ukeynote=[Ukey() for u in range (50)]
-    Kkeynote=[Kkey() for y in range (50)]
-
+    Fkeynote=[Fkey() for i in range (55)]
+    Tkeynote=[Tkey() for o in range (55)]
+    Hkeynote=[Hkey() for p in range (55)]
+    Ukeynote=[Ukey() for u in range (55)]
+    Kkeynote=[Kkey() for y in range (55)]
+    cool = Cool()
+    good = Good()
+    fail = Fail()
 
     pass
 
@@ -290,6 +320,7 @@ def exit():
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,sound
     global green,blue
     global F,T,H,U,K
+    global cool,good,fail
     global state
     del(bgimage)
     del(button)
@@ -312,6 +343,9 @@ def exit():
     del(U)
     del(K)
     del(sound)
+    del(cool)
+    del(good)
+    del(fail)
     pass
 
 
@@ -324,12 +358,14 @@ def resume():
 
 def handle_events(frame_time):
     events = get_events()
-    global green,blue,state,running,F,T,H,U,K,example
+    global green,blue,state,running,F,T,H,U,K,example,sound
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.change_state(jam)
+            exit()
+            game_framework.run(title_state)
+
         elif event.type == SDL_KEYDOWN and event.key == SDLK_f :
             F=True
             green = True
@@ -378,12 +414,7 @@ def goodcollide(a,b):
     if top_a < bottom_b : return False
     if bottom_a > top_b : return False
     return True
-def badcollide(a,b):
-    left_a, bottom_a, right_a, top_a = a.get_bb()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
-    if top_a +3 < bottom_b : return False
-    if bottom_a <top_b : return False
-    return True
+
 def misscollide(a,b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
@@ -393,9 +424,28 @@ def misscollide(a,b):
 
 def update(frame_time):
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote
-    global F,T,H,U,K
+    global F,T,H,U,K,count
     F = T = H = U = K = False
+    count = 0
     soundplay()
+def Timer(frame_time):
+    global cool,good,fail,a
+    if cool.switch:
+        a+=frame_time
+        if a>0.5:
+            cool.switch = False
+            a=0
+    if good.switch:
+        a+=frame_time
+        if a>0.5:
+            good.switch = False
+            a=0
+    if fail.switch:
+        a+=frame_time
+        if a>0.5:
+            fail.switch = False
+            a=0
+
 
 def draw(frame_time):
     global running
@@ -403,20 +453,13 @@ def draw(frame_time):
     global a
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,bgimage,actbutton
     global green,blue,F,T,H,U,K
+    global cool,good,fail,count
     green = blue = F = T = H = U = K = False
     a = 0
+    count = 0
     while running:
         handle_events(frame_time)
-        for Fkeynotes in Fkeynote:
-            Fkeynotes.update(frame_time)
-        for Tkeynotes in Tkeynote:
-            Tkeynotes.update(frame_time)
-        for Hkeynotes in Hkeynote:
-            Hkeynotes.update(frame_time)
-        for Ukeynotes in Ukeynote:
-            Ukeynotes.update(frame_time)
-        for Kkeynotes in Kkeynote:
-            Kkeynotes.update(frame_time)
+
         for Fkeynotes in Fkeynote:
             Fkeynotes.update(frame_time)
         for Tkeynotes in Tkeynote:
@@ -432,68 +475,57 @@ def draw(frame_time):
             if F==True:
                 if coolcollide(actbutton,Fkeynotes)==True:
                     Fkeynote.remove(Fkeynotes)
-                    print("cool")
+                    cool.switch=True
                 elif goodcollide(actbutton,Fkeynotes)==True:
                     Fkeynote.remove(Fkeynotes)
-                    print("good")
-                elif badcollide(actbutton,Fkeynotes)==True:
-                    Fkeynote.remove(Fkeynotes)
-                    print("bad")
-            if misscollide(actbutton,Fkeynotes) == True:
+                    good.switch=True
+            if misscollide(actbutton,Fkeynotes):
                 Fkeynote.remove(Fkeynotes)
-                print("miss")
+                fail.switch=True
         for Tkeynotes in Tkeynote:
             if T==True:
                 if coolcollide(actbutton,Tkeynotes)==True:
                     Tkeynote.remove(Tkeynotes)
+                    cool.switch=True
                 elif goodcollide(actbutton,Tkeynotes)==True:
                     Tkeynote.remove(Tkeynotes)
-                    print("good")
-                elif badcollide(actbutton,Tkeynotes)==True:
-                    Tkeynote.remove(Tkeynotes)
-                    print("bad")
-            if misscollide(actbutton,Tkeynotes) == True:
+                    good.switch=True
+            if misscollide(actbutton,Tkeynotes):
                 Tkeynote.remove(Tkeynotes)
-                print("miss")
+                fail.switch=True
         for Hkeynotes in Hkeynote:
             if H==True:
                 if coolcollide(actbutton,Hkeynotes)==True:
                     Hkeynote.remove(Hkeynotes)
+                    cool.switch=True
                 elif goodcollide(actbutton,Hkeynotes)==True:
                     Hkeynote.remove(Hkeynotes)
-                    print("good")
-                elif badcollide(actbutton,Hkeynotes)==True:
-                    Hkeynote.remove(Hkeynotes)
-                    print("bad")
-            if misscollide(actbutton,Hkeynotes) == True:
+                    good.switch=True
+            if misscollide(actbutton,Hkeynotes):
                 Hkeynote.remove(Hkeynotes)
-                print("miss")
+                fail.switch=True
         for Ukeynotes in Ukeynote:
             if U==True:
                 if coolcollide(actbutton,Ukeynotes)==True:
                     Ukeynote.remove(Ukeynotes)
+                    cool.switch=True
                 elif goodcollide(actbutton,Ukeynotes)==True:
                     Ukeynote.remove(Ukeynotes)
-                    print("good")
-                elif badcollide(actbutton,Ukeynotes)==True:
-                    Ukeynote.remove(Ukeynotes)
-                    print("bad")
-            if misscollide(actbutton,Ukeynotes) == True:
+                    good.switch=True
+            if misscollide(actbutton,Ukeynotes):
                 Ukeynote.remove(Ukeynotes)
-                print("miss")
+                fail.switch=True
         for Kkeynotes in Kkeynote:
             if K==True:
                 if coolcollide(actbutton,Kkeynotes)==True:
                     Kkeynote.remove(Kkeynotes)
+                    cool.switch=True
                 elif goodcollide(actbutton,Kkeynotes)==True:
                     Kkeynote.remove(Kkeynotes)
-                    print("good")
-                elif badcollide(actbutton,Kkeynotes)==True:
-                    Kkeynote.remove(Kkeynotes)
-                    print("bad")
-            if misscollide(actbutton,Kkeynotes) == True:
+                    good.switch=True
+            if misscollide(actbutton,Kkeynotes):
                 Kkeynote.remove(Kkeynotes)
-                print("miss")
+                fail.switch=True
 
         clear_canvas()
         bgimage.draw(400,300,800,600)
@@ -517,10 +549,20 @@ def draw(frame_time):
             motionT.draw(90,100,47,1000)
         if blue == True  and U ==True:
             motionU.draw(185,100,47,1000)
-
-        a+=frame_time
+        if cool.switch:
+            cool.draw()
+        if good.switch:
+            good.draw()
+        if fail.switch:
+            fail.draw()
+        count+=frame_time
+        print(count)
+        Timer(frame_time)
         button.draw(200,100,400,200)
         update_canvas()
+        if(count>107.5):
+            exit()
+            game_framework.run(title_state)
 
 
 
