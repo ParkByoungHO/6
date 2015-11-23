@@ -1,7 +1,7 @@
 import game_framework
 import main_state
-import mpolice
-import jam
+import showdown
+import minus1
 from pico2d import *
 
 
@@ -33,9 +33,9 @@ def handle_events(frame_time):
             elif(event.type, event.key) == (SDL_KEYDOWN,SDLK_RETURN):
                 game_framework.change_state(main_state)
             elif(event.type, event.key) == (SDL_KEYDOWN,SDLK_RIGHT):
-                game_framework.change_state(jam)
+                game_framework.change_state(minus1)
             elif(event.type, event.key) == (SDL_KEYDOWN,SDLK_LEFT):
-                game_framework.change_state(mpolice)
+                game_framework.change_state(showdown)
     pass
 
 
