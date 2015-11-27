@@ -1,5 +1,5 @@
 import game_framework
-import main_state
+import say_that_you_note
 import title_state
 import minus1
 from pico2d import *

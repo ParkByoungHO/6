@@ -1,7 +1,9 @@
 import random
 import json
 import os
-from score import score
+import score
+
+
 
 from pico2d import *
 
@@ -239,6 +241,31 @@ class Kkey:
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
             self.NOTE_SPEED_PPS = self.NOTE_SPEED_PPS / 2.0
             self.y /= 2
+
+
+class State:
+    def __init__(self):
+        global Score
+        self.coolcount = 0
+        self.goodcount = 0
+        self.failcount = 0
+        self.combocount =0
+    def update(self):
+        self.coolcount = Score.coolcount
+        self.goodcount = Score.goodcount
+        self.failcount = Score.failcount
+        self.combocount = Score.combocount
+    def cool(self):
+        self.coolcount = Score.coolcount
+    def good(self):
+        self.goodcount = Score.goodcount
+    def fail(self):
+        self.failcount = Score.failcount
+    def combo(self):
+        self.combocount = Score.combocount
+
+
+
 class buttontectangle:
     def __init__(self):
         self.x, self.y = 136,81.5
@@ -284,8 +311,14 @@ class Fail:
     def draw(self):
         self.image.draw(self.x,self.y)
 
-
-
+class Combo:
+    image = None
+    def __init__(self):
+        if Combo.image == None:
+            Combo.image = load_image('resource/combo.png')
+        self.x,self.y = 320,400
+    def draw(self):
+        self.image.draw(self.x,self.y)
 
 
 
@@ -294,7 +327,7 @@ def enter():
     global bgimage, button,motionF,motionT,motionH,motionU,motionK,actbutton
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote
     global green,blue,F,T,H,U,K
-    global cool,good,fail,sum,Score
+    global cool,good,fail,sum,combo,Score,font
 
 
     motionF = load_image('resource/keyboard_motion_green.png')
@@ -315,16 +348,18 @@ def enter():
     cool = Cool()
     good = Good()
     fail = Fail()
-    Score = score()
+    combo = Combo()
+    font = load_font('resource/Moebius.TTF',30)
+    Score = State()
     pass
 
 
 def exit():
     global bgimage,button,motionF,motionT,motionH,motionU,motionK,actbutton
-    global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,sound
+    global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,sound,font
     global green,blue
     global F,T,H,U,K
-    global cool,good,fail,coolcount,goodcount,failcount,sum,combocount,Score
+    global cool,good,fail,coolcount,goodcount,failcount,sum,combocount,Score,combo
     del(bgimage)
     del(button)
     del (motionF)
@@ -350,7 +385,9 @@ def exit():
     del(good)
     del(fail)
     del(sum)
+    del(combo)
     del(Score)
+    del(font)
     pass
 
 
@@ -458,7 +495,7 @@ def draw(frame_time):
     global a
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,bgimage,actbutton,soundmax
     global green,blue,F,T,H,U,K
-    global cool,good,fail,count,coolcount,goodcount,failcount,sum
+    global cool,good,fail,count,coolcount,goodcount,failcount,sum,combo,font
     global Score
     green = blue = F = T = H = U = K = False
     a = sum = 0
@@ -493,7 +530,7 @@ def draw(frame_time):
                 Fkeynote.remove(Fkeynotes)
                 fail.switch=True
                 Score.failcount+=1
-                sum=0
+                Score.combocount=0
         for Tkeynotes in Tkeynote:
             if T==True:
                 if coolcollide(actbutton,Tkeynotes)==True:
@@ -512,7 +549,7 @@ def draw(frame_time):
                 Tkeynote.remove(Tkeynotes)
                 fail.switch=True
                 Score.failcount+=1
-                sum=0
+                Score.combocount=0
         for Hkeynotes in Hkeynote:
             if H==True:
                 if coolcollide(actbutton,Hkeynotes)==True:
@@ -532,7 +569,7 @@ def draw(frame_time):
                 Hkeynote.remove(Hkeynotes)
                 fail.switch=True
                 Score.failcount+=1
-                sum=0
+                Score.combocount=0
         for Ukeynotes in Ukeynote:
             if U==True:
                 if coolcollide(actbutton,Ukeynotes)==True:
@@ -551,7 +588,7 @@ def draw(frame_time):
                 Ukeynote.remove(Ukeynotes)
                 fail.switch=True
                 Score.failcount+=1
-                sum=0
+                Score.combocount=0
         for Kkeynotes in Kkeynote:
             if K==True:
                 if coolcollide(actbutton,Kkeynotes)==True:
@@ -570,7 +607,7 @@ def draw(frame_time):
                 Kkeynote.remove(Kkeynotes)
                 fail.switch=True
                 Score.failcount+=1
-                sum=0
+                Score.combocount=0
 
         clear_canvas()
         bgimage.draw(400,300,800,600)
@@ -596,19 +633,24 @@ def draw(frame_time):
             motionU.draw(185,100,47,1000)
         if cool.switch:
             cool.draw()
+            combo.draw()
+            font.draw(312, 380, '%d' % (Score.combocount), (255,125,0))
         if good.switch:
             good.draw()
+            combo.draw()
+            font.draw(312, 380, '%d' % (Score.combocount), (255,125,0))
         if fail.switch:
             fail.draw()
+
         count+=frame_time
         Timer(frame_time)
         button.draw(200,100,400,200)
         update_canvas()
         if(count>94.5):
-            Score.draw()
+            Score.update()
         if(count>96):
             exit()
-            game_framework.run(title_state)
+            game_framework.run(score)
 
 
 

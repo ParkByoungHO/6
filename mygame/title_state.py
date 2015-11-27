@@ -1,5 +1,5 @@
 import game_framework
-import main_state
+import say_that_you_note
 import showdown
 import minus1
 from pico2d import *
@@ -31,7 +31,7 @@ def handle_events(frame_time):
             if(event.type, event.key) == (SDL_KEYDOWN,SDLK_ESCAPE):
                 game_framework.quit()
             elif(event.type, event.key) == (SDL_KEYDOWN,SDLK_RETURN):
-                game_framework.change_state(main_state)
+                game_framework.change_state(say_that_you_note)
             elif(event.type, event.key) == (SDL_KEYDOWN,SDLK_RIGHT):
                 game_framework.change_state(minus1)
             elif(event.type, event.key) == (SDL_KEYDOWN,SDLK_LEFT):

@@ -557,7 +557,6 @@ def draw(frame_time):
         if fail.switch:
             fail.draw()
         count+=frame_time
-        print(count)
         Timer(frame_time)
         button.draw(200,100,400,200)
         update_canvas()
