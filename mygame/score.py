@@ -1,33 +1,25 @@
 import game_framework
-import state
-import say_that_you_note
 import title_state
-import showdown
-import minus1note
+import json
 from pico2d import *
 
 
 
 name = "score"
-image = None
+
 
 
 def enter():
-    global image,cool,good,fail,combo
-    image = load_image('resource/blackbg.jpg')
-    cool = minus1note.State.cool()
-    good = minus1note.State.good()
-    fail = minus1note.State.fail()
-    combo =minus1note.State.combo()
+    global image,font
+    image = load_image('resource/blue.png')
+    font = load_font('resource/Moebius.ttf',30)
 
 
 def exit():
-    global image,cool,good,fail,combo
+    global image,font
     del(image)
-    del(cool)
-    del(good)
-    del(fail)
-    del(combo)
+    del(font)
+
 
     pass
 
@@ -44,15 +36,21 @@ def handle_events(frame_time):
                 game_framework.change_state(title_state)
 
 
-    pass
+def draw_score():
+    with open('resource/Score.txt', 'r') as f:
+        score_list = json.load(f)
+    font.draw(300, 500, '[SCORE]', (255,255,255))
+    for i, record in enumerate(score_list):
+        font.draw(20, 450, '(cool:%4.1d, good:%4.1d,failcount:4.1d, COMBO:%3d, score:%4.1d)' % ('cool','good','fail','score','combo'), (255,255,255))
+
 
 
 def draw(frame_time):
+    global image
     clear_canvas()
-    image.draw(400,300,800,600)
-    print(cool,good,fail,combo)
+    image.draw(400, 300)
+
     update_canvas()
-    pass
 
 
 
