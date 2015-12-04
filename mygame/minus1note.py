@@ -256,7 +256,7 @@ def soundplay(frame_time):
 
     global sound,soundmax
     soundmax = 100
-    sound =load_music('resource/MINUS 1.mp3')
+    sound =load_music('resource/MINUS 1.ogg')
     sound.set_volume(soundmax)
     sound.play(1)
 
@@ -328,6 +328,7 @@ def enter():
     fail = Fail()
     combo = Combo()
     font = load_font('resource/Moebius.TTF',30)
+
     pass
 
 
@@ -337,7 +338,6 @@ def exit():
     global green,blue
     global F,T,H,U,K
     global cool,good,fail,coolcount,goodcount,failcount,sum,combocount,Score,combo
-    ranking()
     del(bgimage)
     del(button)
     del (motionF)
@@ -466,18 +466,21 @@ def Timer(frame_time):
             a=0
 def ranking():
     global coolcount,goodcount,failcount,sum
+
     score = (coolcount*10)+(goodcount*5)
-    record = {"cool" : coolcount ,"good":goodcount,"fail":failcount,"score": score,"Combo":sum}
 
-    score_list = []
-    if os.path.exists('resource/Score.txt'):
-        with open('resource/Score.txt', 'r') as f:
-            score_list = json.load(f)
+    f= open("resource/Score.txt",'w')
+    cool = "cool:%d   " % coolcount
+    good = "good:%d   " % goodcount
+    fail = "fail:%d   " % failcount
+    Score = "score:%d " % score
 
-        score_list.append(record)
-        with open('resource/Score.txt', 'w') as f:
-            json.dump(score_list, f)
+    f.write(cool)
+    f.write(good)
+    f.write(fail)
+    f.write(Score)
 
+    f.close()
 
 def draw(frame_time):
     global running
@@ -489,7 +492,7 @@ def draw(frame_time):
     global Score
     green = blue = F = T = H = U = K = False
     a = sum = coolcount=goodcount=failcount=sum=combocount=0
-    count = 90
+    count =0
     while running:
         handle_events(frame_time)
 
@@ -632,13 +635,14 @@ def draw(frame_time):
             font.draw(312, 380, '%d' % (combocount), (255,125,0))
         if fail.switch:
             fail.draw()
-
+        font.draw(312, 30, 'score : %d' % (coolcount*10+goodcount*5), (255,125,0))
         count+=frame_time
         Timer(frame_time)
         button.draw(200,100,400,200)
         update_canvas()
 
         if(count>96):
+            ranking()
             exit()
             game_framework.run(score)
 

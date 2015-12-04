@@ -11,7 +11,7 @@ def enter():
     global image,bgm
     open_canvas(sync=True)
     image = load_image('resource/bg.png')
-    bgm = load_music('resource/1.mp3')
+    bgm = load_music('resource/1.ogg')
     bgm.set_volume(64)
     bgm.play(1)
     pass

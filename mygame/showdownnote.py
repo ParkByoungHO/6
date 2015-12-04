@@ -1,6 +1,7 @@
 import random
 import json
 import os
+import score
 from pico2d import *
 
 import game_framework
@@ -23,7 +24,7 @@ class Fkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 45,random.randint(800,52500)
+        self.x , self.y = 45,random.randint(800,51800)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -71,7 +72,7 @@ class Tkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 90,random.randint(800,52500)
+        self.x , self.y = 90,random.randint(800,51800)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -116,7 +117,7 @@ class Hkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 140,random.randint(800,52500)
+        self.x , self.y = 140,random.randint(800,51800)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -161,7 +162,7 @@ class Ukey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 188,random.randint(800,52500)
+        self.x , self.y = 188,random.randint(800,51800)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -206,7 +207,7 @@ class Kkey:
     FRAMES_PER_ACTION = 2
     image = None
     def __init__(self):
-        self.x , self.y = 230,random.randint(800,52500)
+        self.x , self.y = 230,random.randint(800,51800)
         self.total_frames = 0.0
         self.dir = -1
         self.frame = 0
@@ -249,7 +250,7 @@ def soundplay(frame_time):
 
     global sound,soundmax
     soundmax = 100
-    sound =load_music('resource/showdown.mp3')
+    sound =load_music('resource/showdown.ogg')
     sound.set_volume(soundmax)
     sound.play(1)
 
@@ -281,6 +282,14 @@ class Fail:
         self.switch = False
     def draw(self):
         self.image.draw(self.x,self.y)
+class Combo:
+    image = None
+    def __init__(self):
+        if Combo.image == None:
+            Combo.image = load_image('resource/combo.png')
+        self.x,self.y = 320,400
+    def draw(self):
+        self.image.draw(self.x,self.y)
 
 
 
@@ -290,7 +299,7 @@ class Fail:
 
 def enter():
     global bgimage, button,motionF,motionT,motionH,motionU,motionK,actbutton
-    global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote
+    global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,font,combo,combocount
     global green,blue,F,T,H,U,K
     global cool,good,fail
     global state
@@ -312,7 +321,8 @@ def enter():
     cool = Cool()
     good = Good()
     fail = Fail()
-
+    combo = Combo()
+    font = load_font('resource/Moebius.TTF',30)
     pass
 
 
@@ -321,7 +331,7 @@ def exit():
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,sound
     global green,blue
     global F,T,H,U,K
-    global cool,good,fail
+    global cool,good,fail,combo,combocount,font
     global state
     del(bgimage)
     del(button)
@@ -347,6 +357,9 @@ def exit():
     del(cool)
     del(good)
     del(fail)
+    del(font)
+    del(combo)
+    del(combocount)
     pass
 
 
@@ -446,6 +459,23 @@ def Timer(frame_time):
         if a>0.5:
             fail.switch = False
             a=0
+def ranking():
+    global coolcount,goodcount,failcount,sum
+
+    score = (coolcount*10)+(goodcount*5)
+
+    f= open("resource/Score.txt",'w')
+    cool = "cool:%d   " % coolcount
+    good = "good:%d   " % goodcount
+    fail = "fail:%d   " % failcount
+    Score = "score:%d " % score
+
+    f.write(cool)
+    f.write(good)
+    f.write(fail)
+    f.write(Score)
+
+    f.close()
 
 
 def draw(frame_time):
@@ -454,10 +484,11 @@ def draw(frame_time):
     global a
     global Fkeynote,Tkeynote,Hkeynote,Ukeynote,Kkeynote,bgimage,actbutton,soundmax
     global green,blue,F,T,H,U,K
-    global cool,good,fail,count
+    global cool,good,fail,count,coolcount,goodcount,failcount,sum,combocount,font,combo
+    global Score
     green = blue = F = T = H = U = K = False
-    a = 0
-    count = 0
+    a = sum = coolcount=goodcount=failcount=sum=combocount=0
+    count =0
     while running:
         handle_events(frame_time)
 
@@ -477,56 +508,96 @@ def draw(frame_time):
                 if coolcollide(actbutton,Fkeynotes)==True:
                     Fkeynote.remove(Fkeynotes)
                     cool.switch=True
+                    coolcount+=1
+                    combocount+=1
+                    sum+=1
                 elif goodcollide(actbutton,Fkeynotes)==True:
                     Fkeynote.remove(Fkeynotes)
                     good.switch=True
+                    goodcount+=1
+                    combocount+=1
+                    sum+=1
             if misscollide(actbutton,Fkeynotes):
                 Fkeynote.remove(Fkeynotes)
                 fail.switch=True
+                failcount+=1
+                combocount=0
         for Tkeynotes in Tkeynote:
             if T==True:
                 if coolcollide(actbutton,Tkeynotes)==True:
                     Tkeynote.remove(Tkeynotes)
                     cool.switch=True
+                    coolcount+=1
+                    combocount+=1
+                    sum+=1
                 elif goodcollide(actbutton,Tkeynotes)==True:
                     Tkeynote.remove(Tkeynotes)
                     good.switch=True
+                    goodcount+=1
+                    combocount+=1
+                    sum+=1
             if misscollide(actbutton,Tkeynotes):
                 Tkeynote.remove(Tkeynotes)
                 fail.switch=True
+                failcount+=1
+                combocount=0
         for Hkeynotes in Hkeynote:
             if H==True:
                 if coolcollide(actbutton,Hkeynotes)==True:
                     Hkeynote.remove(Hkeynotes)
                     cool.switch=True
+                    coolcount+=1
+                    combocount+=1
+                    sum+=1
                 elif goodcollide(actbutton,Hkeynotes)==True:
                     Hkeynote.remove(Hkeynotes)
                     good.switch=True
+                    goodcount+=1
+                    combocount+=1
+                    sum+=1
             if misscollide(actbutton,Hkeynotes):
                 Hkeynote.remove(Hkeynotes)
                 fail.switch=True
+                failcount+=1
+                combocount=0
         for Ukeynotes in Ukeynote:
             if U==True:
                 if coolcollide(actbutton,Ukeynotes)==True:
                     Ukeynote.remove(Ukeynotes)
                     cool.switch=True
+                    coolcount+=1
+                    combocount+=1
+                    sum+=1
                 elif goodcollide(actbutton,Ukeynotes)==True:
                     Ukeynote.remove(Ukeynotes)
                     good.switch=True
+                    goodcount+=1
+                    combocount+=1
+                    sum+=1
             if misscollide(actbutton,Ukeynotes):
                 Ukeynote.remove(Ukeynotes)
                 fail.switch=True
+                failcount+=1
+                combocount=0
         for Kkeynotes in Kkeynote:
             if K==True:
                 if coolcollide(actbutton,Kkeynotes)==True:
                     Kkeynote.remove(Kkeynotes)
                     cool.switch=True
+                    coolcount+=1
+                    combocount+=1
+                    sum+=1
                 elif goodcollide(actbutton,Kkeynotes)==True:
                     Kkeynote.remove(Kkeynotes)
                     good.switch=True
+                    goodcount+=1
+                    combocount+=1
+                    sum+=1
             if misscollide(actbutton,Kkeynotes):
                 Kkeynote.remove(Kkeynotes)
                 fail.switch=True
+                failcount+=1
+                combocount=0
 
         clear_canvas()
         bgimage.draw(400,300,800,600)
@@ -552,17 +623,24 @@ def draw(frame_time):
             motionU.draw(185,100,47,1000)
         if cool.switch:
             cool.draw()
+            combo.draw()
+            font.draw(312, 380, '%d' % (combocount), (255,125,0))
         if good.switch:
             good.draw()
+            combo.draw()
+            font.draw(312, 380, '%d' % (combocount), (255,125,0))
         if fail.switch:
             fail.draw()
+        font.draw(312, 30, 'score : %d' % (coolcount*10+goodcount*5), (255,125,0))
+
         count+=frame_time
         Timer(frame_time)
         button.draw(200,100,400,200)
         update_canvas()
         if(count>97):
+            ranking()
             exit()
-            game_framework.run(title_state)
+            game_framework.run(score)
 
 
 
