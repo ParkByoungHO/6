@@ -6,11 +6,11 @@ from pico2d import *
 name = "score"
 
 class Score():
-    def __init__(self,student_l):
-        self.cool = student_l[0]
-        self.good = student_l[1]
-        self.fail = student_l[2]
-        self.score = student_l[3]
+    def __init__(self,score):
+        self.cool = score[0]
+        self.good = score[1]
+        self.fail = score[2]
+        self.score = score[3]
     def draw(self):
         font.draw( 350, 350,'%s' %(self.cool),(255,125,0))
         font.draw( 350, 300,'%s' %(self.good),(255,125,0))
@@ -24,7 +24,7 @@ def enter():
     font = load_font('resource/Moebius.ttf',30)
 
     f = open('resource/Score.txt','r').read().split() #텍스트파일에서 정보를 읽어와서 공백을 기준으로 나눔.
-    s = Score(f) #그 정보를 student클래스의 생성자 인자로 보냄.
+    s = Score(f) #그 정보를 score클래스 생성자 인자로 보냄.
 
 def exit():
     global image,font,s

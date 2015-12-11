@@ -10,13 +10,18 @@ image = None
 
 
 def enter():
-    global image
+    global image,bgm
     image = load_image('resource/saythatyou.jpg')
+    bgm = load_wav('resource/saythatbg.wav')
+    bgm.set_volume(64)
+    bgm.play(1)
+    bgm.repeat_play()
     pass
 
 
 def exit():
-    global image
+    global image,bgm
+    del(bgm)
     del(image)
 
     pass

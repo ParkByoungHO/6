@@ -632,7 +632,6 @@ def draw(frame_time):
         if fail.switch:
             fail.draw()
         font.draw(312, 30, 'score : %d' % (coolcount*10+goodcount*5), (255,125,0))
-
         count+=frame_time
         Timer(frame_time)
         button.draw(200,100,400,200)

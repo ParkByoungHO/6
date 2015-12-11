@@ -79,9 +79,9 @@ manifest_template = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 
 
-mygame = Target(script="mygame.py",
-                dest_base = "MyGame",
-            icon_resources=[(1,r"resource/pico2d.ico")],
+mygame = Target(script = "mygame.py",
+                dest_base="MyGame",
+                icon_resources=[(1,r"resource/pico2d.ico")],
                 other_resources = [(RT_MANIFEST, 1, (manifest_template % dict(prog="mygame", level="asInvoker")).encode("utf-8"))]
     )
 
@@ -94,12 +94,12 @@ py2exe_options = dict(
     )
 
 
-resources = os.listdir("F:/mygame/resource")
+resources = ('resource/1.ogg', 'resource/2011180021.txt', 'resource/bg.png', 'resource/blackbg.jpg', 'resource/blue.png', 'resource/button.png', 'resource/combo.png', 'resource/Cool.png', 'resource/ENCR10B.TTF', 'resource/Fail.png', 'resource/Good.png', 'resource/green_note.png', 'resource/keyboard_motion_green.png', 'resource/keyboard_motion_sky.png', 'resource/MINUS 1.ogg', 'resource/minus1.jpg', 'resource/Moebius.ttf', 'resource/pico2d.ico', 'resource/say that you.ogg', 'resource/saythatyou.jpg', 'resource/Score.txt', 'resource/showdown.jpg', 'resource/Showdown.ogg', 'resource/sky_note.png', 'resource/showdownbg.wav', 'resource/saythatbg.wav', 'resource/Minus1bg.wav')
 
 if platform.architecture()[0] == '32bit':
-    sdl_folder = 'resource/SDL2/x86/'
+    sdl_folder = 'SDL2/x86/'
 else:
-    sdl_folder = 'resource/SDL2/x64/'
+    sdl_folder = 'SDL2/x64/'
 
 sdl_dlls = [sdl_folder + file_name for file_name in os.listdir(sdl_folder)]
 

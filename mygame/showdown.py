@@ -11,14 +11,18 @@ image = None
 
 
 def enter():
-    global image
+    global image,bgm
     image = load_image('resource/showdown.jpg')
+    bgm = load_wav('resource/showdownbg.wav')
+    bgm.set_volume(64)
+    bgm.repeat_play()
     pass
 
 
 def exit():
-    global image
+    global image,bgm
     del(image)
+    del(bgm)
 
     pass
 

@@ -1,1 +1,1 @@
-cool:252   good:77   fail:21   score:2905 
+cool:228   good:70   fail:17   score:2630 

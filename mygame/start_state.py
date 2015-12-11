@@ -13,7 +13,7 @@ def enter():
     image = load_image('resource/bg.png')
     bgm = load_music('resource/1.ogg')
     bgm.set_volume(64)
-    bgm.play(1)
+    bgm.repeat_play()
     pass
 
 
